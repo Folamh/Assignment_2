@@ -1,4 +1,4 @@
-class GameObject{
+abstract class GameObject{
   int x, y;
   
   GameObject(){
