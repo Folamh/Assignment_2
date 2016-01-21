@@ -1,19 +1,31 @@
 class Arrow extends GameObject{
+  PVector pos;
+  Boolean inUse;
+  
   Arrow(int x, int y){
-    this.x = x;
-    this.y = y;
+    pos = new PVector(x, y);
+    inUse = true;
   }
   
   void render(){
-    line(x, y, x - 5, y - 3);
-    line(x, y, x - 5, y + 3);
-    line(x - 5, y - 3, x - 5, y + 3);
-    line(x - 5, y, x - 25, y);
-    line(x - 23, y, x - 25, y - 3);
-    line(x - 23, y, x - 25, y + 3);
-    line(x - 21, y, x - 23, y - 3);
-    line(x - 21, y, x - 23, y + 3);
-    line(x - 19, y, x - 21, y - 3);
-    line(x - 19, y, x - 21, y + 3);
+    stroke(0);
+    line(pos.x, pos.y, pos.x - 5, pos.y - 3);
+    line(pos.x, pos.y, pos.x - 5, pos.y + 3);
+    line(pos.x - 5, pos.y - 3, pos.x - 5, pos.y + 3);
+    line(pos.x - 5, pos.y, pos.x - 25, pos.y);
+    line(pos.x - 23, pos.y, pos.x - 25, pos.y - 3);
+    line(pos.x - 23, pos.y, pos.x - 25, pos.y + 3);
+    line(pos.x - 21, pos.y, pos.x - 23, pos.y - 3);
+    line(pos.x - 21, pos.y, pos.x - 23, pos.y + 3);
+    line(pos.x - 19, pos.y, pos.x - 21, pos.y - 3);
+    line(pos.x - 19, pos.y, pos.x - 21, pos.y + 3);
+  }
+  
+  void update(){
+    
+  }
+  
+  void shoot(float vX, float vY){
+    pos.set(vX, vY);
   }
 }

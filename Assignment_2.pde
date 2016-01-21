@@ -15,15 +15,14 @@ void draw(){
     case 1: /*Main Menu*/
       gameState = loadMenu();
       break;
-    case 2:
-      background(255);
-      Archer bowMan = new Archer(20, 20);
-      bowMan.render();
-      Arrow arrow = new Arrow(50, 50);
-      arrow.render();
+    case 2: /*Target Mode*/
+      gameState = loadTarget();
       break;
-    case 3:
-      background(255);
+    case 3: /*Versus Mode*/
+      gameState = loadVersus();
+      break;
+    case 4: /*Highscores*/
+      gameState = loadScores();
       break;
     default:
       println("ERROR: gameState broke switch.");
@@ -32,7 +31,7 @@ void draw(){
 }
 
 /*Methods*/
-int loadStart(){
+int loadStart(){/*Start Screen*/
   background(0);
   fill(255);
   textAlign(CENTER);
@@ -50,10 +49,20 @@ int loadStart(){
 
 int loadMenu(){/*Main Menu*/
   background(0);
+  int buttonXTM = width/2;
+  int buttonYTM = height/2 - 50;
   int buttonXVM = width/2;
   int buttonYVM = height/2;
   int buttonXHS = width/2;
   int buttonYHS = height/2 + 50;
+  
+  if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 15) && mouseY <= (buttonYTM)){
+      fill(25, 25, 125);
+  }
+  else{
+    fill(255);
+  }
+  text("Target Mode", buttonXTM, buttonYTM);
   
   if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 15) && mouseY <= (buttonYVM)){
       fill(25, 25, 125);
@@ -72,12 +81,32 @@ int loadMenu(){/*Main Menu*/
   text("Highscores", buttonXHS, buttonYHS);
   
   if(mousePressed){
-    if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
+    if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 20) && mouseY <= (buttonYTM + 20)){
       return 2;
     }
-    if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
+    if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
       return 3;
+    }
+    if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
+      return 4;
     }
   }
   return 1;
+}
+
+int loadTarget(){
+  background(255);
+  Archer bowMan = new Archer(20, 20);
+  bowMan.render();
+  Arrow arrow = new Arrow(55, 20);
+  arrow.render();
+  return 2;
+}
+
+int loadVersus(){
+  return 3;
+}
+
+int loadScores(){
+  return 4;
 }
