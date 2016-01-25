@@ -5,11 +5,6 @@ abstract class GameObject{
     
   }
   
-  void render(){
-    
-  }
-  
-  void update(){
-    
-  }
+  abstract void render();
+  abstract void update();
 }
