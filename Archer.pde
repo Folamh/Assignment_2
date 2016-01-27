@@ -11,12 +11,7 @@ class Archer extends GameObject{
     this.x = x;
     this.y = y;
     
-    vX = 0;
-    vY = 0;
-    x1 = 0;
-    y1 = 0;
-    x2 = 0; 
-    y2 = 0;
+    vX = vY = x1 = y1 = x2 = y2 = 0;
     
     handX = x + 10;
     armX = x + 5;
@@ -67,6 +62,7 @@ class Archer extends GameObject{
       println("Pressed");
       firing = true;
     }
+    
     if((mousePressed == false) && (firing)){
       x2 = mouseX;
       y2 = mouseY;
@@ -74,15 +70,18 @@ class Archer extends GameObject{
       firing = false;
     }
     
+    vX = vY = 0;
     vX = x1 - mouseX;
-    vY = y2 - mouseY;
+    vY = y1 - mouseY;
+    
+    float deg = abs(degrees(atan(vX/vY)));
+    float mag = sqrt(sq(vX) + sq(vY));
     
     if(firing){
       line(x1, y1, mouseX, mouseY);
-      text(atan(vX/vY) + " " + abs(degrees(atan(vX/vY))) + "°", mouseX - 20, mouseY - 10);
+      mag = map(mag, 0, 300, 0, 100);
+      if(mag > 100) mag = 100;
+      text(int(mag) + " " + int(deg) + "°", mouseX - 20, mouseY - 10);
     }
-    
-    vX = x1 - x2;
-    vY = y2 - y1;
   }
 }
