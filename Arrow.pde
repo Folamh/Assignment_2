@@ -1,10 +1,12 @@
 class Arrow extends GameObject{
   PVector pos;
   Boolean inUse;
+  Boolean hit;
   
   Arrow(int x, int y){
     pos = new PVector(x, y);
-    inUse = true;
+    inUse = false;
+    hit = false;
   }
   
   void render(){
@@ -22,10 +24,11 @@ class Arrow extends GameObject{
   }
   
   void update(){
-    
-  }
-  
-  void shoot(float vX, float vY){
-    pos.set(vX, vY);
+    if(!hit){
+      pos.add(x, y);
+      if(inUse){
+        pos.sub(0, -0.15);
+      }
+    }
   }
 }

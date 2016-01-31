@@ -93,14 +93,13 @@ int loadMenu(){/*Main Menu*/
   }
   return 1;
 }
-Archer bowMan = new Archer(20, 20);
-Arrow arrow = new Arrow(55, 20);
+Archer bowMan = new Archer(20, height);
+
 int loadTarget(){
   background(255);
-  
+  bowMan.update();
   bowMan.render();
   
-  arrow.render();
   return 2;
 }
 
