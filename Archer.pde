@@ -5,6 +5,9 @@ class Archer extends GameObject{
   float vX, vY, x1, y1, x2, y2;
   boolean firing;
   PVector aim;
+  PVector arm;
+  float angle;
+  PVector plane;
   
   ArrayList<Arrow> arrows;
   int curArrow;
@@ -13,12 +16,15 @@ class Archer extends GameObject{
     this.x = x;
     this.y = y;
     aim = new PVector(0, 0);
+    arm = new PVector(0, 0);
+    plane = new PVector(0, 0);
+    plane.set(10, 0);
     
     vX = vY = x1 = y1 = x2 = y2 = 0;
     
-    handX = x + 10;
-    armX = x + 5;
-    armY = y + 3;
+    handX = 10;
+    armX = 5;
+    armY = 3;
     
     firing = false;
     
@@ -31,12 +37,25 @@ class Archer extends GameObject{
     stroke(0);
     fill(0);
     
-    drawArcher();
-    drawBow();
     for(Arrow a: arrows){
       a.render();
     }
+    
+    drawArcher();
+    
+    handX = int(map(arm.mag(), 0, 100, 10, 0));
+    armX = int(map(arm.mag(), 0, 100, 5, -5));
+    armY = 3;
+    
+    angle = PVector.angleBetween(arm, plane);
+    if(arm.y < 0) angle = - angle;
+    pushMatrix();
+    translate(x, y);
+    rotate(angle);
+    drawBow();
+    popMatrix();
     pull();
+    
   }
   
   void update(){
@@ -56,13 +75,13 @@ class Archer extends GameObject{
   void drawBow(){  /*Draw Bow*/
     stroke(0);
     fill(0);
-    line(x, y, x + 11, y);
-    line(x, y, armX, armY);
-    line(armX, armY, handX, y);
-    line(x + 10, y + 10, handX, y);
-    line(x + 10, y - 10, handX, y);
+    line(0, 0, 11, 0);
+    line(0, 0, armX, armY);
+    line(armX, armY, handX, 0);
+    line(10, 10, handX, 0);
+    line(10, -10, handX, 0);
     noFill();
-    curve(x - 10, y + 15, x + 10, y - 10, x + 10, y + 10, x - 10, y - 15);
+    curve(-10, 15, 10, -10, 10, 10, -10, -15);
     
   }
 
@@ -86,6 +105,9 @@ class Archer extends GameObject{
     float mag = sqrt(sq(vX) + sq(vY));
     
     if(firing){
+      arm.set(vX, vY);
+      if(arm.mag() > 100) aim.setMag(100);
+      arm.setMag(map(aim.mag(), 0, 100, 0, 100));
       line(x1, y1, mouseX, mouseY);
       mag = map(mag, 0, 300, 0, 100);
       if(mag > 100) mag = 100;
@@ -107,7 +129,11 @@ class Archer extends GameObject{
       curArrow++;
       loadArrow();
       println("Released");
+      handX = 10;
+      armX = 5;
+      armY = 3;
       firing = false;
     }
+    
   }
 }
