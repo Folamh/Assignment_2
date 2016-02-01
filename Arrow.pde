@@ -32,14 +32,11 @@ class Arrow extends GameObject{
       hit = true;
     }
     if(!hit){
-      if(aim.mag() > 35){
-        aim.setMag(35);
+      if(inUse){
+        aim.sub(0, - gravity);
+        gravity += 0.05;
       }
       pos.add(aim);
-      if(inUse){
-        pos.sub(0, - gravity);
-        gravity += 0.1;
-      }
     }
   }
 }

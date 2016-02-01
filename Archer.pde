@@ -4,6 +4,7 @@ class Archer extends GameObject{
   int armY;
   float vX, vY, x1, y1, x2, y2;
   boolean firing;
+  PVector aim;
   
   ArrayList<Arrow> arrows;
   int curArrow;
@@ -11,6 +12,7 @@ class Archer extends GameObject{
   Archer(int x, int y){
     this.x = x;
     this.y = y;
+    aim = new PVector(0, 0);
     
     vX = vY = x1 = y1 = x2 = y2 = 0;
     
@@ -96,8 +98,12 @@ class Archer extends GameObject{
       
       vX = x1 - x2;
       vY = y1 - y2;
+      
+      aim.set(vX, vY);
+      if(aim.mag() > 100) aim.setMag(100);
+      aim.setMag(map(aim.mag(), 0, 100, 0, 35));
       arrows.get(curArrow).inUse = true;
-      arrows.get(curArrow).aim.set(vX, vY);
+      arrows.get(curArrow).aim.set(aim);
       curArrow++;
       loadArrow();
       println("Released");
