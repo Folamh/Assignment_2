@@ -1,9 +1,11 @@
 /*Global Variables*/
 int gameState = 0;
+Archer bowMan;
 
 /*Setup*/
 void setup(){
   size(1000, 500);
+  bowMan = new Archer(20, height - 50);
 }
 
 /*Draw*/
@@ -93,7 +95,6 @@ int loadMenu(){/*Main Menu*/
   }
   return 1;
 }
-Archer bowMan = new Archer(20, height);
 
 int loadTarget(){
   background(255);

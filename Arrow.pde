@@ -1,12 +1,16 @@
 class Arrow extends GameObject{
   PVector pos;
+  PVector aim;
   Boolean inUse;
   Boolean hit;
+  float gravity;
   
   Arrow(int x, int y){
     pos = new PVector(x, y);
+    aim = new PVector(0, 0);
     inUse = false;
     hit = false;
+    gravity = 0;
   }
   
   void render(){
@@ -24,10 +28,17 @@ class Arrow extends GameObject{
   }
   
   void update(){
+    if(pos.y > height - 30){
+      hit = true;
+    }
     if(!hit){
-      pos.add(x, y);
+      if(aim.mag() > 35){
+        aim.setMag(35);
+      }
+      pos.add(aim);
       if(inUse){
-        pos.sub(0, -0.15);
+        pos.sub(0, - gravity);
+        gravity += 0.1;
       }
     }
   }

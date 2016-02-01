@@ -97,8 +97,7 @@ class Archer extends GameObject{
       vX = x1 - x2;
       vY = y1 - y2;
       arrows.get(curArrow).inUse = true;
-      arrows.get(curArrow).x = int(vX);
-      arrows.get(curArrow).y = int(vY);
+      arrows.get(curArrow).aim.set(vX, vY);
       curArrow++;
       loadArrow();
       println("Released");
