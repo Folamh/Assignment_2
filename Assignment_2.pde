@@ -1,12 +1,15 @@
 /*Global Variables*/
 int gameState = 0;
-Archer bowMan;
 int wait = 0;
+
+/**/
+ArrayList<GameObject> targetObjects = new ArrayList<GameObject>();
 
 /*Setup*/
 void setup(){
   size(1000, 500);
-  bowMan = new Archer(20, height - 50);
+  targetObjects.add(new Archer(20, height - 50));
+  targetObjects.add(new Target());
 }
 
 /*Draw*/
@@ -104,9 +107,20 @@ int loadMenu(){/*Main Menu*/
 
 int loadTarget(){
   background(255);
-  bowMan.update();
-  bowMan.render();
-  
+  for(GameObject o: targetObjects){
+    o.update();
+    o.render();
+  }
+  for(int i = 0; i < targetObjects.size(); i++){
+    GameObject bowMan = targetOjects.get(i);
+    if(targetObjects instanceof Archer){
+      GameObject 
+      if(targetObjects instanceof Target){
+        
+      }
+    }
+  }
+  line(-5000, height - 25, 5000, height - 25);
   return 2;
 }
 

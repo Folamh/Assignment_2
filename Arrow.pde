@@ -38,7 +38,7 @@ class Arrow extends GameObject{
   }
   
   void update(){
-    if(pos.y > height - 30){
+    if(pos.y > height - 25){
       hit = true;
     }
     if(!hit){
