@@ -1,6 +1,7 @@
 /*Global Variables*/
 int gameState = 0;
 Archer bowMan;
+int wait = 0;
 
 /*Setup*/
 void setup(){
@@ -18,7 +19,12 @@ void draw(){
       gameState = loadMenu();
       break;
     case 2: /*Target Mode*/
-      gameState = loadTarget();
+      if(wait < 60){
+        wait++;
+      }
+      else{
+        gameState = loadTarget();
+      }
       break;
     case 3: /*Versus Mode*/
       gameState = loadVersus();

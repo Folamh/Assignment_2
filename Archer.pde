@@ -37,8 +37,11 @@ class Archer extends GameObject{
     stroke(0);
     fill(0);
     
-    for(Arrow a: arrows){
-      a.render();
+    for(int i = 0; i < curArrow; i++){
+      arrows.get(i).render();
+    }
+    if(arrows.get(curArrow).inUse == true){
+      arrows.get(curArrow).render();
     }
     
     drawArcher();
@@ -52,6 +55,9 @@ class Archer extends GameObject{
     pushMatrix();
     translate(x, y);
     rotate(angle);
+    if(arrows.get(curArrow).inUse == false){
+      arrows.get(curArrow).render();
+    }
     drawBow();
     popMatrix();
     pull();
@@ -59,6 +65,10 @@ class Archer extends GameObject{
   }
   
   void update(){
+    if(arrows.get(curArrow).hit == true){
+      loadArrow();
+    }
+    
     for(Arrow a: arrows){
       a.update();
     }
@@ -86,7 +96,8 @@ class Archer extends GameObject{
   }
 
   void loadArrow(){
-    arrows.add(new Arrow(x + 35, y));
+    curArrow++;
+    arrows.add(new Arrow(35, 0));
   }
   
   void pull(){
@@ -105,16 +116,18 @@ class Archer extends GameObject{
     float mag = sqrt(sq(vX) + sq(vY));
     
     if(firing){
-      arm.set(vX, vY);
-      if(arm.mag() > 100) aim.setMag(100);
-      arm.setMag(map(aim.mag(), 0, 100, 0, 100));
       line(x1, y1, mouseX, mouseY);
       mag = map(mag, 0, 300, 0, 100);
       if(mag > 100) mag = 100;
       text(int(mag) + " " + int(deg) + "°", mouseX - 20, mouseY - 10);
+      
+      arm.set(vX, vY);
+      if(arm.mag() > 100) aim.setMag(100);
+      arm.setMag(map(aim.mag(), 0, 100, 0, 100));
     }
     
     if((mousePressed == false) && (firing)){
+      arrows.get(curArrow).pos.set(x, y);
       x2 = mouseX;
       y2 = mouseY;
       
@@ -126,14 +139,12 @@ class Archer extends GameObject{
       aim.setMag(map(aim.mag(), 0, 100, 0, 35));
       arrows.get(curArrow).inUse = true;
       arrows.get(curArrow).aim.set(aim);
-      curArrow++;
-      loadArrow();
       println("Released");
+      
       handX = 10;
       armX = 5;
       armY = 3;
       firing = false;
     }
-    
   }
 }
