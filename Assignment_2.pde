@@ -112,11 +112,15 @@ int loadTarget(){
     o.render();
   }
   for(int i = 0; i < targetObjects.size(); i++){
-    GameObject bowMan = targetOjects.get(i);
-    if(targetObjects instanceof Archer){
-      GameObject 
-      if(targetObjects instanceof Target){
-        
+    GameObject bowMan = targetObjects.get(i);
+    if(bowMan instanceof Archer){
+      for(int j = targetObjects.size() - 1; j >= 0; j--){
+        GameObject target = targetObjects.get(j);
+        if(target instanceof Target){
+          if((((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.x > target.x - 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.x < target.x + 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.y > target.y - 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.y < target.y + 20)){
+            ((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).hit = true;
+          }
+        }
       }
     }
   }

@@ -6,10 +6,9 @@ class Target extends GameObject{
   }
   
   void render(){
-    fill(0);
     stroke(0);
     rectMode(CENTER);
-    rect(x, y, 6, 30);
+    rect(x, y, 40, 40);
   }
   
   void update(){
