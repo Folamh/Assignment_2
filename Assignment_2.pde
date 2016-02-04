@@ -119,6 +119,8 @@ int loadTarget(){
         if(target instanceof Target){
           if((((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.x > target.x - 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.x < target.x + 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.y > target.y - 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.y < target.y + 20)){
             ((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).hit = true;
+            targetObjects.remove(j);
+            targetObjects.add(new Target());
           }
         }
       }
