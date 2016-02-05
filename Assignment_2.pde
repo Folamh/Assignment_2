@@ -117,15 +117,16 @@ int loadTarget(){
       for(int j = targetObjects.size() - 1; j >= 0; j--){
         GameObject target = targetObjects.get(j);
         if(target instanceof Target){
-          if((((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.x > target.x - 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.x < target.x + 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.y > target.y - 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.y < target.y + 20)){
+          if((((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.x > target.x - 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.x < target.x + 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.y > target.y - 20) && (((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).pos.y < target.y + 20) && (((Target)target).hit == false)){
             ((Archer)bowMan).arrows.get(((Archer)bowMan).curArrow).hit = true;
-            targetObjects.remove(j);
+            ((Target)target).hit = true;
             targetObjects.add(new Target());
           }
         }
       }
     }
   }
+  stroke(0);
   line(-5000, height - 25, 5000, height - 25);
   return 2;
 }
