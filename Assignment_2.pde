@@ -1,6 +1,8 @@
 /*Global Variables*/
 int gameState = 0;
 int wait = 0;
+int wait2 = 0;
+boolean paused = false;
 
 /**/
 ArrayList<GameObject> targetObjects = new ArrayList<GameObject>();
@@ -14,30 +16,44 @@ void setup(){
 
 /*Draw*/
 void draw(){
-  switch(gameState){
-    case 0: /*Start Menu*/
-      gameState = loadStart();
-      break;
-    case 1: /*Main Menu*/
-      gameState = loadMenu();
-      break;
-    case 2: /*Target Mode*/
-      if(wait < 60){
-        wait++;
-      }
-      else{
-        gameState = loadTarget();
-      }
-      break;
-    case 3: /*Versus Mode*/
-      gameState = loadVersus();
-      break;
-    case 4: /*Highscores*/
-      gameState = loadScores();
-      break;
-    default:
-      println("ERROR: gameState broke switch.");
-      break;
+  if(wait2 < 30){
+    wait2++;
+  }
+  else{
+    switch(gameState){
+      case 0: /*Start Menu*/
+        gameState = loadStart();
+        break;
+      case 1: /*Main Menu*/
+        gameState = loadMenu();
+        break;
+      case 2: /*Target Mode*/
+        if (keyPressed || paused) {
+          if (key == 'p' || key == 'P' || paused) {
+            wait = 0;
+            paused = true;
+            gameState = pause(gameState);
+          }
+        }
+        else{
+          if(wait < 30){
+            wait++;
+          }
+          else{
+            gameState = loadTarget();
+          }
+        }
+        break;
+      case 3: /*Versus Mode*/
+        gameState = loadVersus();
+        break;
+      case 4: /*Highscores*/
+        gameState = loadScores();
+        break;
+      default:
+        println("ERROR: gameState broke switch.");
+        break;
+    }
   }
 }
 
@@ -137,4 +153,56 @@ int loadVersus(){
 
 int loadScores(){
   return 4;
+}
+
+int pause(int game){
+  background(0);
+  int buttonXTM = width/2;
+  int buttonYTM = height/2 - 50;
+  int buttonXVM = width/2;
+  int buttonYVM = height/2;
+  int buttonXHS = width/2;
+  int buttonYHS = height/2 + 50;
+  
+  if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 15) && mouseY <= (buttonYTM)){
+      fill(25, 25, 125);
+  }
+  else{
+    fill(255);
+  }
+  text("Resume Game", buttonXTM, buttonYTM);
+  
+  if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 15) && mouseY <= (buttonYVM)){
+      fill(25, 25, 125);
+  }
+  else{
+    fill(255);
+  }
+  text("Main Menu", buttonXVM, buttonYVM);
+  
+  if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 15) && mouseY <= (buttonYHS)){
+      fill(25, 25, 125);
+  }
+  else{
+    fill(255);
+  }
+  text("Exit", buttonXHS, buttonYHS);
+  
+  if(mousePressed){
+    if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 20) && mouseY <= (buttonYTM + 20)){
+      paused = false;
+      return game;
+    }
+    if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
+      paused = false;
+      wait = 0;
+      wait2 = 0;
+      return 1;
+    }
+    if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
+      paused = false;
+      exit();
+    }
+  }
+  return game;
 }
