@@ -197,6 +197,8 @@ int pause(int game){
       paused = false;
       wait = 0;
       wait2 = 0;
+      targetObjects.clear();
+      setup();
       return 1;
     }
     if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
