@@ -7,14 +7,27 @@ boolean paused = false;
 boolean finished;
 int score;
 String name;
+String highscore;
+String scores[];
+ArrayList<String> toLoad = new ArrayList<String>();
 
 /*Game Objects*/
 ArrayList<GameObject> targetObjects = new ArrayList<GameObject>();
 ArrayList<GameObject> versusObjects = new ArrayList<GameObject>();
 
+PrintWriter output;
+
 /*Setup*/
 void setup(){
   size(1000, 500);
+  output = createWriter("highscore.txt"); 
+  scores = loadStrings("highscore.txt");
+  name = "";
+  
+  toLoad.clear();
+  for(int i = 0; i < scores.length; i++){
+    toLoad.add(scores[i]);
+  }
   
   /*Init. Variables*/
   score = 0;
@@ -48,7 +61,7 @@ void draw(){
         
       case 2: /*Target Mode*/
         if (keyPressed || paused) {    //Allow pause menu.
-          if (key == 'p' || key == 'P' || paused) {
+          if (key == ' ' || paused) {
             wait = 0;
             paused = true;
             gameState = pause(gameState);
@@ -192,9 +205,31 @@ int loadTarget(){
     int buttonXHS = width/2;
     int buttonYHS = height/2 + 50;
     
-    text("Name?", 250, 150);
+    text("Name?(3 characters)", 250, 150);
     text(name, width/2, 150);
+    text("Press enter to confirm", width/2, 170);
     
+    if(keyPressed){
+      if(key == RETURN || name.length() >= 3){
+        toLoad.add(String.format("%03s %03d", name, score));
+        String temp;
+        for(int i = 0; i < ( scores.length - 1 ); i++){
+            for(int j = 0; j < scores.length - i - 1; j++){
+                if(Integer.parseInt(toLoad.get(j).substring(5)) > Integer.parseInt(toLoad.get(j+1).substring(5))){
+                    temp = toLoad.get(j);
+                    toLoad.set(j, toLoad.get(j+1));
+                    toLoad.set(j+1, temp);
+                 }
+            }
+        }
+        for(int i = 0; i < 10; i++){
+          output.println(toLoad.get(i));
+        }
+      }
+      else{
+        name = name + key;
+      }
+    }
     
     fill(255);
     text("Score: " + score, buttonXTM, buttonYTM);
@@ -228,7 +263,7 @@ int loadTarget(){
     }
   }
   stroke(0);
-  line(-5000, height - 25, 5000, height - 25);
+  line(0, height - 25, width, height - 25);
   return 2;
 }
 
@@ -237,10 +272,23 @@ int loadVersus(){
 }
 
 int loadScores(){
-  String scores[] = loadStrings("highscore.txt");
-  for(int i = 0; i <= 10; i++){
+  background(0);
+  for(int i = 0; i <= 10 && i < toLoad.size(); i++){
     textMode(CENTER);
-    text(scores[i], width/2, ((height - 50)/10)*i);
+    text(toLoad.get(i), width/2, 50 + ((height - 100)/10)*i);
+  }
+  
+  if(mouseX >= (width/2 - 55) && mouseX <= (width/2 + 55) && mouseY >= (height - 40) && mouseY <= (height - 20)){
+      fill(25, 25, 125);
+  }
+  else{
+    fill(255);
+  }
+  text("Main Menu", width/2, height - 20);
+  if(mousePressed){
+    if(mouseX >= (width/2 - 55) && mouseX <= (width/2 + 55) && mouseY >= (height - 40) && mouseY <= (height - 20)){
+      return 1;
+    }
   }
   return 4;
 }
