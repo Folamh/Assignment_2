@@ -7,9 +7,8 @@ boolean paused = false;
 boolean finished;
 int score;
 String name;
-String name2;
 
-/*Game Objectes*/
+/*Game Objects*/
 ArrayList<GameObject> targetObjects = new ArrayList<GameObject>();
 ArrayList<GameObject> versusObjects = new ArrayList<GameObject>();
 
@@ -67,7 +66,7 @@ void draw(){
         
       case 3: /*Versus Mode*/
         if (keyPressed || paused) {    //Allow pause menu.
-          if (key == 'p' || key == 'P' || paused) {
+          if (key == ' ' || paused) {
             wait = 0;
             paused = true;
             gameState = pause(gameState);
@@ -193,6 +192,10 @@ int loadTarget(){
     int buttonXHS = width/2;
     int buttonYHS = height/2 + 50;
     
+    text("Name?", 250, 150);
+    text(name, width/2, 150);
+    
+    
     fill(255);
     text("Score: " + score, buttonXTM, buttonYTM);
     
@@ -234,6 +237,11 @@ int loadVersus(){
 }
 
 int loadScores(){
+  String scores[] = loadStrings("highscore.txt");
+  for(int i = 0; i <= 10; i++){
+    textMode(CENTER);
+    text(scores[i], width/2, ((height - 50)/10)*i);
+  }
   return 4;
 }
 
