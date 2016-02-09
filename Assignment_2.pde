@@ -163,6 +163,14 @@ int loadMenu(){/*Main Menu*/
   }
   text("Highscores", buttonXHS, buttonYHS);
   
+  if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS + 50 - 15) && mouseY <= (buttonYHS + 50)){
+      fill(25, 25, 125);
+  }
+  else{
+    fill(255);
+  }
+  text("Exit", buttonXHS, buttonYHS + 50);
+  
   if(mousePressed){
     if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 20) && mouseY <= (buttonYTM + 20)){
       return 2;
@@ -172,6 +180,9 @@ int loadMenu(){/*Main Menu*/
     }
     if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
       return 4;
+    }
+    if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS + 50 - 20) && mouseY <= (buttonYHS + 50 + 20)){
+      end();
     }
   }
   return 1;
@@ -249,7 +260,7 @@ int loadTarget(){
         }
         if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
           paused = false;
-          exit();
+          end();
         }
       }
     }
@@ -326,7 +337,7 @@ int pause(int game){
     }
     if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
       paused = false;
-      exit();
+      end();
     }
   }
   return game;
@@ -362,7 +373,8 @@ void keyPressed(){
   }
 }
 
-void stop(){
+void end(){
   output.flush();
   output.close();
+  exit();
 }
