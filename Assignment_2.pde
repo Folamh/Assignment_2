@@ -4,7 +4,8 @@ int wait;
 int wait2;
 int wait3;
 int timer;
-boolean paused = false;
+boolean runOnce = true;
+boolean paused;
 boolean finished;
 boolean scoresName;
 int score;
@@ -22,8 +23,11 @@ PrintWriter output;
 /*Setup*/
 void setup(){
   size(1000, 500);
-  output = createWriter("highscore.txt"); 
-  scores = loadStrings("highscore.txt");
+  if(runOnce){
+    scores = loadStrings("highscore.txt");
+    output = createWriter("data\\highscore.txt"); 
+    runOnce = false;
+  }
   name = "";
   
   toLoad.clear();
@@ -35,7 +39,10 @@ void setup(){
   score = wait = wait2 = wait3 = timer = 0;
   finished = false;
   scoresName = false;
+  paused = false;
+  
   /*Target Objects Init.*/
+  targetObjects.clear();
   targetObjects.add(new Archer(20, height - 50));
   targetObjects.add(new Target());
   
@@ -172,7 +179,9 @@ int loadMenu(){/*Main Menu*/
 
 int loadTarget(){
   background(255);
-  if(timer < 0.2*60*60 && finished == false){    //Game timer check
+  if(timer < 0.5*60*60 && finished == false){    //Game timer check
+    int display = 30 - timer/60/60;
+    text(String.format("%d",display), width/2, 50);
     for(GameObject o: targetObjects){    //Update and render of objects.
       o.update();
       o.render();
@@ -197,11 +206,12 @@ int loadTarget(){
   }
   else{    //Game finished screen.
     if(wait3 < 60){
-      wait++;
+      background(0);
+      wait3++;
+      scoresName = true;
     }
     else{
       background(0);
-      scoresName = true;
       int buttonXTM = width/2;
       int buttonYTM = height/2 - 50;
       int buttonXVM = width/2;
@@ -234,8 +244,6 @@ int loadTarget(){
       
       if(mousePressed){
         if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
-          paused = false;
-          targetObjects.clear();
           setup();
           return 1;
         }
@@ -257,6 +265,7 @@ int loadVersus(){
 
 int loadScores(){
   background(0);
+  fill(255);
   for(int i = 0; i <= 10 && i < toLoad.size(); i++){
     textMode(CENTER);
     text(toLoad.get(i), width/2, 50 + ((height - 100)/10)*i);
@@ -312,8 +321,6 @@ int pause(int game){
   
   if(mousePressed){
     if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
-      paused = false;
-      targetObjects.clear();
       setup();
       return 1;
     }
@@ -327,27 +334,35 @@ int pause(int game){
 
 void keyPressed(){
   if(scoresName){
-      println("p1");
-      if(key == RETURN || name.length() >= 3){
-        println("p");
-        toLoad.add(name + " " + String.format("%03d", score));
-        String temp;
-        for(int i = 0; i < ( scores.length - 1 ); i++){
-            for(int j = 0; j < scores.length - i - 1; j++){
-                if(Integer.parseInt(toLoad.get(j).substring(5)) > Integer.parseInt(toLoad.get(j+1).substring(5))){
-                    temp = toLoad.get(j);
-                    toLoad.set(j, toLoad.get(j+1));
-                    toLoad.set(j+1, temp);
-                 }
-            }
-        }
-        for(int i = 0; i < 10 && i< toLoad.size(); i++){
-          output.println(toLoad.get(i));
+    println("p1");
+    if(key == RETURN || name.length() >= 3){
+      println("p");
+      toLoad.add(name + " " + String.format("%03d", score));
+      String temp;
+      for(int i = 0; i < ( scores.length - 1 ); i++){
+        for(int j = 0; j < scores.length - i - 1; j++){
+          if(Integer.parseInt(toLoad.get(j).substring(5, 7)) > Integer.parseInt(toLoad.get(j+1).substring(5, 7))){
+              temp = toLoad.get(j);
+              toLoad.set(j, toLoad.get(j+1));
+              toLoad.set(j+1, temp);
+           }
         }
       }
-      else{
-        println("P");
-        name = name + key;
+      for(int i = 0; i < 10 && i< toLoad.size(); i++){
+        println(toLoad.get(i));
+        output.println(toLoad.get(i));
       }
+      scoresName = false;
     }
+    else{
+      println("P");
+      name += key;
+      name = name.toUpperCase();
+    }
+  }
+}
+
+void stop(){
+  output.flush();
+  output.close();
 }
