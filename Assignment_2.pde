@@ -2,9 +2,11 @@
 int gameState = 0;
 int wait;
 int wait2;
+int wait3;
 int timer;
 boolean paused = false;
 boolean finished;
+boolean scoresName;
 int score;
 String name;
 String highscore;
@@ -30,12 +32,9 @@ void setup(){
   }
   
   /*Init. Variables*/
-  score = 0;
-  wait = 0;
-  wait2 = 0;
-  timer = 0;
+  score = wait = wait2 = wait3 = timer = 0;
   finished = false;
-  
+  scoresName = false;
   /*Target Objects Init.*/
   targetObjects.add(new Archer(20, height - 50));
   targetObjects.add(new Target());
@@ -173,7 +172,7 @@ int loadMenu(){/*Main Menu*/
 
 int loadTarget(){
   background(255);
-  if(timer < 0.5*60*60 && finished == false){    //Game timer check
+  if(timer < 0.2*60*60 && finished == false){    //Game timer check
     for(GameObject o: targetObjects){    //Update and render of objects.
       o.update();
       o.render();
@@ -197,68 +196,53 @@ int loadTarget(){
     timer++;
   }
   else{    //Game finished screen.
-    background(0);
-    int buttonXTM = width/2;
-    int buttonYTM = height/2 - 50;
-    int buttonXVM = width/2;
-    int buttonYVM = height/2;
-    int buttonXHS = width/2;
-    int buttonYHS = height/2 + 50;
-    
-    text("Name?(3 characters)", 250, 150);
-    text(name, width/2, 150);
-    text("Press enter to confirm", width/2, 170);
-    
-    if(keyPressed){
-      if(key == RETURN || name.length() >= 3){
-        toLoad.add(String.format("%03s %03d", name, score));
-        String temp;
-        for(int i = 0; i < ( scores.length - 1 ); i++){
-            for(int j = 0; j < scores.length - i - 1; j++){
-                if(Integer.parseInt(toLoad.get(j).substring(5)) > Integer.parseInt(toLoad.get(j+1).substring(5))){
-                    temp = toLoad.get(j);
-                    toLoad.set(j, toLoad.get(j+1));
-                    toLoad.set(j+1, temp);
-                 }
-            }
-        }
-        for(int i = 0; i < 10; i++){
-          output.println(toLoad.get(i));
-        }
+    if(wait3 < 60){
+      wait++;
+    }
+    else{
+      background(0);
+      scoresName = true;
+      int buttonXTM = width/2;
+      int buttonYTM = height/2 - 50;
+      int buttonXVM = width/2;
+      int buttonYVM = height/2;
+      int buttonXHS = width/2;
+      int buttonYHS = height/2 + 50;
+      
+      fill(255);
+      text("Name?(3 characters)", 250, 150);
+      text(name, width/2, 150);
+      text("Press enter to confirm", width/2, 170);
+      
+      fill(255);
+      text("Score: " + score, buttonXTM, buttonYTM);
+      
+      if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 15) && mouseY <= (buttonYVM)){
+          fill(25, 25, 125);
       }
       else{
-        name = name + key;
+        fill(255);
       }
-    }
-    
-    fill(255);
-    text("Score: " + score, buttonXTM, buttonYTM);
-    
-    if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 15) && mouseY <= (buttonYVM)){
+      text("Main Menu", buttonXVM, buttonYVM);
+      if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 15) && mouseY <= (buttonYHS)){
         fill(25, 25, 125);
-    }
-    else{
-      fill(255);
-    }
-    text("Main Menu", buttonXVM, buttonYVM);
-    if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 15) && mouseY <= (buttonYHS)){
-      fill(25, 25, 125);
-    }
-    else{
-      fill(255);
-    }
-    text("Exit", buttonXHS, buttonYHS);
-    
-    if(mousePressed){
-      if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
-        paused = false;
-        targetObjects.clear();
-        setup();
-        return 1;
       }
-      if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
-        paused = false;
-        exit();
+      else{
+        fill(255);
+      }
+      text("Exit", buttonXHS, buttonYHS);
+      
+      if(mousePressed){
+        if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
+          paused = false;
+          targetObjects.clear();
+          setup();
+          return 1;
+        }
+        if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
+          paused = false;
+          exit();
+        }
       }
     }
   }
@@ -339,4 +323,31 @@ int pause(int game){
     }
   }
   return game;
+}
+
+void keyPressed(){
+  if(scoresName){
+      println("p1");
+      if(key == RETURN || name.length() >= 3){
+        println("p");
+        toLoad.add(name + " " + String.format("%03d", score));
+        String temp;
+        for(int i = 0; i < ( scores.length - 1 ); i++){
+            for(int j = 0; j < scores.length - i - 1; j++){
+                if(Integer.parseInt(toLoad.get(j).substring(5)) > Integer.parseInt(toLoad.get(j+1).substring(5))){
+                    temp = toLoad.get(j);
+                    toLoad.set(j, toLoad.get(j+1));
+                    toLoad.set(j+1, temp);
+                 }
+            }
+        }
+        for(int i = 0; i < 10 && i< toLoad.size(); i++){
+          output.println(toLoad.get(i));
+        }
+      }
+      else{
+        println("P");
+        name = name + key;
+      }
+    }
 }
