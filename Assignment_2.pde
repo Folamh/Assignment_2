@@ -27,13 +27,11 @@ void setup(){
     scores = loadStrings("highscore.txt");
     output = createWriter("data\\highscore.txt"); 
     runOnce = false;
+    for(int i = 0; i < scores.length; i++){
+      toLoad.add(scores[i]);
+    }
   }
   name = "";
-  
-  toLoad.clear();
-  for(int i = 0; i < scores.length; i++){
-    toLoad.add(scores[i]);
-  }
   
   /*Init. Variables*/
   score = wait = wait2 = wait3 = timer = 0;
@@ -191,8 +189,6 @@ int loadMenu(){/*Main Menu*/
 int loadTarget(){
   background(255);
   if(timer < 0.5*60*60 && finished == false){    //Game timer check
-    int display = 30 - timer/60/60;
-    text(String.format("%d",display), width/2, 50);
     for(GameObject o: targetObjects){    //Update and render of objects.
       o.update();
       o.render();
@@ -279,7 +275,7 @@ int loadScores(){
   fill(255);
   for(int i = 0; i <= 10 && i < toLoad.size(); i++){
     textMode(CENTER);
-    text(toLoad.get(i), width/2, 50 + ((height - 100)/10)*i);
+    text("#" + (i+1) + " " + toLoad.get(i), width/2, 50 + ((height - 100)/10)*i);
   }
   
   if(mouseX >= (width/2 - 55) && mouseX <= (width/2 + 55) && mouseY >= (height - 40) && mouseY <= (height - 20)){
@@ -350,19 +346,16 @@ void keyPressed(){
       println("p");
       toLoad.add(name + " " + String.format("%03d", score));
       String temp;
-      for(int i = 0; i < ( scores.length - 1 ); i++){
-        for(int j = 0; j < scores.length - i - 1; j++){
-          if(Integer.parseInt(toLoad.get(j).substring(5, 7)) > Integer.parseInt(toLoad.get(j+1).substring(5, 7))){
+      for(int i = 0; i < ( toLoad.size() - 1 ); i++){
+        for(int j = 0; j < toLoad.size() - i - 1; j++){
+          if(Integer.parseInt(toLoad.get(j).substring(5, 7)) < Integer.parseInt(toLoad.get(j+1).substring(5, 7))){
               temp = toLoad.get(j);
               toLoad.set(j, toLoad.get(j+1));
               toLoad.set(j+1, temp);
            }
         }
       }
-      for(int i = 0; i < 10 && i< toLoad.size(); i++){
-        println(toLoad.get(i));
-        output.println(toLoad.get(i));
-      }
+      
       scoresName = false;
     }
     else{
@@ -374,6 +367,10 @@ void keyPressed(){
 }
 
 void end(){
+  for(int i = 0; i < 10 && i < toLoad.size(); i++){
+    println(toLoad.get(i));
+    output.println(toLoad.get(i));
+  }
   output.flush();
   output.close();
   exit();
