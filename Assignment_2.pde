@@ -30,10 +30,10 @@ void setup(){
     minim = new Minim(this);
     ping = minim.loadFile("ping.wav");
     scores = loadStrings("highscore.txt");
-    runOnce = false;
     for(int i = 0; i < scores.length; i++){
       toLoad.add(scores[i]);
     }
+    runOnce = false;
   }
   
   /*Init. Variables*/
@@ -342,8 +342,10 @@ void keyPressed(){
       scoresName = false;
     }
     else{    //Takes keyboard input, coverts it to uppercase
-      name += key;
-      name = name.toUpperCase();
+      if(key >= 65 || key <= 90 || key >= 97 ||key <= 122){
+        name += key;
+        name = name.toUpperCase();
+      }
     }
   }
 }
