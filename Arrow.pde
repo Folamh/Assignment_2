@@ -2,7 +2,7 @@ class Arrow extends GameObject{
   PVector pos;
   PVector aim;
   PVector plane;
-  Boolean inUse;
+  Boolean inFlight;
   Boolean hit;
   float gravity;
   float angle;
@@ -12,7 +12,7 @@ class Arrow extends GameObject{
     aim = new PVector(0, 0);
     plane = new PVector(0, 0);
     plane.set(10, 0);
-    inUse = false;
+    inFlight = false;
     hit = false;
     gravity = 0;
   }
@@ -42,7 +42,7 @@ class Arrow extends GameObject{
       hit = true;
     }
     if(!hit){
-      if(inUse){
+      if(inFlight){
         aim.sub(0, - gravity);
         gravity += 0.05;
       }

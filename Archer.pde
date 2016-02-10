@@ -29,8 +29,7 @@ class Archer extends GameObject{
     firing = false;
     
     arrows = new ArrayList<Arrow>();
-    curArrow = 0;
-    arrows.add(new Arrow(x + 35, y));
+    curArrow = -1;loadArrow();
   }
   
   void render(){
@@ -40,7 +39,7 @@ class Archer extends GameObject{
     for(int i = 0; i < curArrow; i++){
       arrows.get(i).render();
     }
-    if(arrows.get(curArrow).inUse == true){
+    if(arrows.get(curArrow).inFlight == true){
       arrows.get(curArrow).render();
     }
     
@@ -55,16 +54,16 @@ class Archer extends GameObject{
     pushMatrix();
     translate(x, y);
     rotate(angle);
-    if(arrows.get(curArrow).inUse == false){
+    if(arrows.get(curArrow).inFlight == false){
       arrows.get(curArrow).render();
     }
     drawBow();
     popMatrix();
-    pull();
     
   }
   
   void update(){
+    pull();
     if(arrows.get(curArrow).hit == true){
       loadArrow();
     }
@@ -137,7 +136,7 @@ class Archer extends GameObject{
       aim.set(vX, vY);
       if(aim.mag() > 100) aim.setMag(100);
       aim.setMag(map(aim.mag(), 0, 100, 0, 35));
-      arrows.get(curArrow).inUse = true;
+      arrows.get(curArrow).inFlight = true;
       arrows.get(curArrow).aim.set(aim);
       println("Released");
       
