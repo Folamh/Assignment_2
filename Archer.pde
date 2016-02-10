@@ -108,8 +108,8 @@ class Archer extends GameObject{
     arrows.add(new Arrow(35, 0));
   }
   
-  void pull(){
-    if((mousePressed) && (firing == false)){
+  void pull(){    //Method for calculating the force applied to the arrow + aiming
+    if((mousePressed) && (firing == false)){    //When the mouse is clicked and held
       x1 = mouseX;
       y1 = mouseY;
       println("Pressed");
@@ -123,7 +123,7 @@ class Archer extends GameObject{
     float deg = abs(degrees(atan(vX/vY)));
     float mag = sqrt(sq(vX) + sq(vY));
     
-    if(firing){
+    if(firing){    //While the mouse button is being held down
       line(x1, y1, mouseX, mouseY);
       mag = map(mag, 0, 300, 0, 100);
       if(mag > 100) mag = 100;
@@ -133,7 +133,7 @@ class Archer extends GameObject{
       if(arm.mag() > 100) arm.setMag(100);
     }
     
-    if((mousePressed == false) && (firing)){
+    if((mousePressed == false) && (firing)){    //If the mouse is released
       arrows.get(curArrow).pos.set(x, y);
       x2 = mouseX;
       y2 = mouseY;
@@ -141,9 +141,10 @@ class Archer extends GameObject{
       vX = x1 - x2;
       vY = y1 - y2;
       
-      aim.set(vX, vY);
-      if(aim.mag() > 100) aim.setMag(100);
-      aim.setMag(map(aim.mag(), 0, 100, 0, 35));
+      aim.set(vX, vY);    //Main calculation for the arrow
+      aim.setMag(map(aim.mag(), 0, 300, 0, 100)); //to match up with the pull indicator
+      if(aim.mag() > 100) aim.setMag(100);    //Limit the max speed of the arrow
+      aim.setMag(map(aim.mag(), 0, 100, 0, 35));    //Reduce to physical(ish) speeds
       arrows.get(curArrow).inFlight = true;
       arrows.get(curArrow).aim.set(aim);
       println("Released");
