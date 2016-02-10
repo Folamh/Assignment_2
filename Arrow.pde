@@ -18,7 +18,7 @@ class Arrow extends GameObject{
   }
   
   void render(){
-    angle = PVector.angleBetween(aim, plane);
+    angle = PVector.angleBetween(aim, plane);    //This beauty gives the arrow a trail while it moves.
     if(aim.y < 0) angle = - angle;
     pushMatrix();
     translate(pos.x, pos.y);
@@ -38,11 +38,11 @@ class Arrow extends GameObject{
   }
   
   void update(){
-    if(pos.y > height - 25){
+    if(pos.y > height - 25){    //Checks if it hit the ground
       hit = true;
     }
-    if(!hit){
-      if(inFlight){
+    if(!hit){    //Checks if it has hit anything, if not run code
+      if(inFlight){    //Apply gravity
         aim.sub(0, - gravity);
         gravity += 0.05;
       }
