@@ -15,6 +15,7 @@ String highscore;
 String scores[];
 ArrayList<String> toLoad = new ArrayList<String>();
 Minim minim;
+AudioPlayer ping;
 
 /*Game Objects*/
 ArrayList<GameObject> targetObjects = new ArrayList<GameObject>();
@@ -27,6 +28,7 @@ void setup(){
   size(1000, 500);
   if(runOnce){
     minim = new Minim(this);
+    ping = minim.loadFile("ping.wav");
     scores = loadStrings("highscore.txt");
     runOnce = false;
     for(int i = 0; i < scores.length; i++){
@@ -176,6 +178,8 @@ int loadTarget(){
               ((Target)target).hit = true;
               targetObjects.add(new Target());
               score++;
+              ping.play();
+              ping.rewind();
             }
           }
         }
