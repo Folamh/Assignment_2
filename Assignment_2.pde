@@ -1,3 +1,5 @@
+import ddf.minim.*;
+
 /*Global Variables*/
 int gameState = 0;
 int wait;
@@ -12,6 +14,7 @@ String name;
 String highscore;
 String scores[];
 ArrayList<String> toLoad = new ArrayList<String>();
+Minim minim;
 
 /*Game Objects*/
 ArrayList<GameObject> targetObjects = new ArrayList<GameObject>();
@@ -23,6 +26,7 @@ PrintWriter output;
 void setup(){
   size(1000, 500);
   if(runOnce){
+    minim = new Minim(this);
     scores = loadStrings("highscore.txt");
     runOnce = false;
     for(int i = 0; i < scores.length; i++){

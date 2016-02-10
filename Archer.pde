@@ -9,12 +9,14 @@ class Archer extends GameObject{
   PVector arm;
   float angle;
   PVector plane;
+  AudioPlayer shoot;
   
   /*Arrows*/
   ArrayList<Arrow> arrows;
   int curArrow;
   
   Archer(int x, int y){
+    shoot = minim.loadFile("shoot.wav", 2048);
     this.x = x;
     this.y = y;
     aim = new PVector(0, 0);
@@ -139,6 +141,8 @@ class Archer extends GameObject{
     }
     
     if((mousePressed == false) && (firing)){    //If the mouse is released
+      shoot.play();
+      shoot.rewind();
       arrows.get(curArrow).pos.set(x, y);
       x2 = mouseX;
       y2 = mouseY;
