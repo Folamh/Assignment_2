@@ -61,8 +61,10 @@ class Archer extends GameObject{
     pushMatrix();
     translate(x, y);
     rotate(angle);
-    if(arrows.get(curArrow).inFlight == false){
+    if(arrows.get(curArrow).inFlight == false){    //Moves the arrowback when drawing
+      arrows.get(curArrow).pos.sub(map(handX,10, 0, 0, 10), 0);
       arrows.get(curArrow).render();
+      arrows.get(curArrow).pos.add(map(handX,10, 0, 0, 10), 0);
     }
     drawBow();
     popMatrix();
@@ -101,7 +103,7 @@ class Archer extends GameObject{
     
   }
 
-  void loadArrow(){
+  void loadArrow(){    //Adds an new arrow to the list and sets it to the current arrow
     curArrow++;
     arrows.add(new Arrow(35, 0));
   }
