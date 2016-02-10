@@ -1,4 +1,5 @@
 class Archer extends GameObject{
+  /*Variables*/
   int handX;
   int armX;
   int armY;
@@ -9,6 +10,7 @@ class Archer extends GameObject{
   float angle;
   PVector plane;
   
+  /*Arrows*/
   ArrayList<Arrow> arrows;
   int curArrow;
   
@@ -28,27 +30,28 @@ class Archer extends GameObject{
     
     firing = false;
     
+    /*Load the first Arrow*/
     arrows = new ArrayList<Arrow>();
-    curArrow = -1;loadArrow();
+    curArrow = -1;
+    loadArrow();
   }
   
   void render(){
-    
-    textAlign(CENTER);
+    textAlign(CENTER);    //Instructions to play
     fill(125);
     if(curArrow == 0) text("Click, hold & drag the mouse to aim, release to fire", width/2, height/2);
     
     stroke(0);
     fill(0);
     
-    for(int i = 0; i < curArrow; i++){
+    for(int i = 0; i < curArrow; i++){    //Render the shot arrows
       arrows.get(i).render();
     }
-    if(arrows.get(curArrow).inFlight == true){
+    if(arrows.get(curArrow).inFlight == true){     //If the arrow is in flight render it
       arrows.get(curArrow).render();
     }
     
-    drawArcher();
+    drawArcher();    //Call the fucion that just draws the archer without arms
     
     handX = int(map(arm.mag(), 0, 100, 10, 0));
     armX = int(map(arm.mag(), 0, 100, 5, -5));
@@ -126,8 +129,8 @@ class Archer extends GameObject{
       text(int(mag) + " " + int(deg) + "°", mouseX - 20, mouseY - 10);
       
       arm.set(vX, vY);
-      if(arm.mag() > 100) aim.setMag(100);
-      arm.setMag(map(aim.mag(), 0, 100, 0, 100));
+      if(arm.mag() > 100) arm.setMag(100);
+      arm.setMag(map(arm.mag(), 0, 100, 0, 100));
     }
     
     if((mousePressed == false) && (firing)){
