@@ -53,12 +53,11 @@ class Archer extends GameObject{
     
     drawArcher();    //Call the fucion that just draws the archer without arms
     
-    handX = int(map(arm.mag(), 0, 100, 10, 0));
+    handX = int(map(arm.mag(), 0, 100, 10, 0));    //Sets the Archer pulling animation
     armX = int(map(arm.mag(), 0, 100, 5, -5));
-    armY = 3;
     
-    angle = PVector.angleBetween(arm, plane);
-    if(arm.y < 0) angle = - angle;
+    angle = PVector.angleBetween(arm, plane);    //Sets the angle of the aiming
+    if(arm.y < 0) angle = - angle;  //Inverts the angle so it can aim omni-directional
     pushMatrix();
     translate(x, y);
     rotate(angle);
@@ -130,7 +129,6 @@ class Archer extends GameObject{
       
       arm.set(vX, vY);
       if(arm.mag() > 100) arm.setMag(100);
-      arm.setMag(map(arm.mag(), 0, 100, 0, 100));
     }
     
     if((mousePressed == false) && (firing)){
