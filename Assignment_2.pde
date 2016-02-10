@@ -246,7 +246,7 @@ int loadTarget(){
 int loadScores(){ /*Highscores*/
   background(0);
   fill(255);
-  for(int i = 0; i <= 10 && i < toLoad.size(); i++){    //Shows the scores on screen
+  for(int i = 0; i < 10 && i < toLoad.size(); i++){    //Shows the scores on screen
     textAlign(CENTER);
     text("#" + (i+1) + " " + toLoad.get(i), width/2, 50 + ((height - 100)/10)*i);
   }
