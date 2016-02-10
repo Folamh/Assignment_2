@@ -263,7 +263,7 @@ int loadScores(){ /*Highscores*/
   return 3;
 }
 
-int pause(int game){
+int pause(int game){    //Creates the pause menu
   background(0);
   int buttonXTM = width/2;
   int buttonYTM = height/2 - 50;
@@ -272,6 +272,7 @@ int pause(int game){
   int buttonXHS = width/2;
   int buttonYHS = height/2 + 50;
   
+  /*Highlighting*/
   if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 15) && mouseY <= (buttonYTM)){
       fill(25, 25, 125);
   }
@@ -298,12 +299,12 @@ int pause(int game){
   
   if(mousePressed){
     if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
-      setup();
-      return 1;
+      setup();    //Reset variables
+      return 1;    //Main Menu
     }
     if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
       paused = false;
-      exit();
+      exit();    //Exit
     }
   }
   return game;
