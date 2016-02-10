@@ -6,7 +6,6 @@ int wait3;
 int timer;
 boolean runOnce = true;
 boolean paused;
-boolean finished;
 boolean scoresName;
 int score;
 String name;
@@ -34,7 +33,6 @@ void setup(){
   
   /*Init. Variables*/
   score = wait = wait2 = wait3 = timer = 0;
-  finished = false;
   scoresName = false;
   paused = false;
   
@@ -44,7 +42,7 @@ void setup(){
   targetObjects.add(new Target());
   
   /*Versus Objects Init.*/
-  
+  versusObjects.clear();
 }
 
 /*Draw*/
@@ -80,25 +78,7 @@ void draw(){
         }
         break;
         
-      case 3: /*Versus Mode*/
-        if (keyPressed || paused) {    //Allow pause menu.
-          if (key == ' ' || paused) {
-            wait = 0;
-            paused = true;
-            gameState = pause(gameState);
-          }
-        }
-        else{    //Wait timer to stop previous input carry over.
-          if(wait < 30){
-            wait++;
-          }
-          else{
-            gameState = loadVersus();
-          }
-        }
-        break;
-        
-      case 4: /*Highscores*/
+      case 3: /*Highscores*/
         gameState = loadScores();
         break;
         
@@ -116,7 +96,7 @@ int loadStart(){/*Start Screen*/
   textAlign(CENTER);
   text("Press any key to start", width/2, height - 20);
   textSize(50);
-  text("HUNTER", width/2, height/2);
+  text("ARCHER", width/2, height/2);
   textSize(16);
   
   if(keyPressed){//Input into gameState.
@@ -142,7 +122,7 @@ int loadMenu(){/*Main Menu*/
   else{
     fill(255);
   }
-  text("Target Mode", buttonXTM, buttonYTM);
+  text("Shoot Targets", buttonXTM, buttonYTM);
   
   if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 15) && mouseY <= (buttonYVM)){
       fill(25, 25, 125);
@@ -150,7 +130,7 @@ int loadMenu(){/*Main Menu*/
   else{
     fill(255);
   }
-  text("Versus Mode", buttonXVM, buttonYVM);
+  text("Highscores", buttonXVM, buttonYVM);
   
   if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 15) && mouseY <= (buttonYHS)){
       fill(25, 25, 125);
@@ -158,15 +138,7 @@ int loadMenu(){/*Main Menu*/
   else{
     fill(255);
   }
-  text("Highscores", buttonXHS, buttonYHS);
-  
-  if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS + 50 - 15) && mouseY <= (buttonYHS + 50)){
-      fill(25, 25, 125);
-  }
-  else{
-    fill(255);
-  }
-  text("Exit", buttonXHS, buttonYHS + 50);
+  text("Exit", buttonXHS, buttonYHS);
   
   if(mousePressed){
     if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 20) && mouseY <= (buttonYTM + 20)){
@@ -176,9 +148,6 @@ int loadMenu(){/*Main Menu*/
       return 3;
     }
     if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
-      return 4;
-    }
-    if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS + 50 - 20) && mouseY <= (buttonYHS + 50 + 20)){
       exit();
     }
   }
@@ -187,7 +156,9 @@ int loadMenu(){/*Main Menu*/
 
 int loadTarget(){
   background(255);
-  if(timer < 0.5*60*60 && finished == false){    //Game timer check
+  if(timer < 0.5*60*60){    //Game timer check
+    float time = (0.5*60*60) - float(timer);
+    text(String.format("%.0f", time), width/2, 50);
     for(GameObject o: targetObjects){    //Update and render of objects.
       o.update();
       o.render();
@@ -226,8 +197,11 @@ int loadTarget(){
       int buttonYHS = height/2 + 50;
       
       fill(255);
-      text("Name?(3 characters)", 250, 150);
+      textAlign(RIGHT);
+      text("Name?(3 characters)", 450, 150);
+      textAlign(CENTER);
       text(name, width/2, 150);
+      fill(125);
       text("Press enter to confirm", width/2, 170);
       
       fill(255);
@@ -265,15 +239,11 @@ int loadTarget(){
   return 2;
 }
 
-int loadVersus(){
-  return 3;
-}
-
-int loadScores(){
+int loadScores(){ /*Highscores*/
   background(0);
   fill(255);
   for(int i = 0; i <= 10 && i < toLoad.size(); i++){
-    textMode(CENTER);
+    textAlign(CENTER);
     text("#" + (i+1) + " " + toLoad.get(i), width/2, 50 + ((height - 100)/10)*i);
   }
   
@@ -289,7 +259,7 @@ int loadScores(){
       return 1;
     }
   }
-  return 4;
+  return 3;
 }
 
 int pause(int game){
