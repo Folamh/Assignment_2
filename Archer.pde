@@ -33,6 +33,11 @@ class Archer extends GameObject{
   }
   
   void render(){
+    
+    textAlign(CENTER);
+    fill(125);
+    if(curArrow == 0) text("Click, hold & drag the mouse to aim, release to fire", width/2, height/2);
+    
     stroke(0);
     fill(0);
     

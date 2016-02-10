@@ -198,7 +198,7 @@ int loadTarget(){
       
       fill(255);
       textAlign(RIGHT);
-      text("Name?(3 characters)", 450, 150);
+      text("Name (3 characters):", 450, 150);
       textAlign(CENTER);
       text(name, width/2, 150);
       fill(125);
@@ -312,7 +312,6 @@ void keyPressed(){
   if(scoresName){
     println("p1");
     if(key == RETURN || name.length() >= 3){
-      println("p");
       toLoad.add(name + " " + String.format("%03d", score));
       String temp;
       for(int i = 0; i < ( toLoad.size() - 1 ); i++){
@@ -334,7 +333,6 @@ void keyPressed(){
       scoresName = false;
     }
     else{
-      println("P");
       name += key;
       name = name.toUpperCase();
     }
