@@ -25,7 +25,6 @@ void setup(){
   size(1000, 500);
   if(runOnce){
     scores = loadStrings("highscore.txt");
-    output = createWriter("data\\highscore.txt"); 
     runOnce = false;
     for(int i = 0; i < scores.length; i++){
       toLoad.add(scores[i]);
@@ -180,7 +179,7 @@ int loadMenu(){/*Main Menu*/
       return 4;
     }
     if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS + 50 - 20) && mouseY <= (buttonYHS + 50 + 20)){
-      end();
+      exit();
     }
   }
   return 1;
@@ -256,7 +255,7 @@ int loadTarget(){
         }
         if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
           paused = false;
-          end();
+          exit();
         }
       }
     }
@@ -333,7 +332,7 @@ int pause(int game){
     }
     if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
       paused = false;
-      end();
+      exit();
     }
   }
   return game;
@@ -355,7 +354,13 @@ void keyPressed(){
            }
         }
       }
-      
+      output = createWriter("data\\highscore.txt"); 
+      for(int i = 0; i < 10 && i < toLoad.size(); i++){
+        println(toLoad.get(i));
+        output.println(toLoad.get(i));
+      }
+      output.flush();
+      output.close();
       scoresName = false;
     }
     else{
@@ -364,14 +369,4 @@ void keyPressed(){
       name = name.toUpperCase();
     }
   }
-}
-
-void end(){
-  for(int i = 0; i < 10 && i < toLoad.size(); i++){
-    println(toLoad.get(i));
-    output.println(toLoad.get(i));
-  }
-  output.flush();
-  output.close();
-  exit();
 }
