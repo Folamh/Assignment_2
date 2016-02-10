@@ -15,8 +15,8 @@ ArrayList<String> toLoad = new ArrayList<String>();
 
 /*Game Objects*/
 ArrayList<GameObject> targetObjects = new ArrayList<GameObject>();
-ArrayList<GameObject> versusObjects = new ArrayList<GameObject>();
 
+/*Output*/
 PrintWriter output;
 
 /*Setup*/
@@ -29,20 +29,17 @@ void setup(){
       toLoad.add(scores[i]);
     }
   }
-  name = "";
   
   /*Init. Variables*/
   score = wait = wait2 = wait3 = timer = 0;
   scoresName = false;
   paused = false;
+  name = "";
   
   /*Target Objects Init.*/
   targetObjects.clear();
   targetObjects.add(new Archer(20, height - 50));
   targetObjects.add(new Target());
-  
-  /*Versus Objects Init.*/
-  versusObjects.clear();
 }
 
 /*Draw*/
@@ -60,7 +57,7 @@ void draw(){
         gameState = loadMenu();
         break;
         
-      case 2: /*Target Mode*/
+      case 2: /*Shoot Targets*/
         if (keyPressed || paused) {    //Allow pause menu.
           if (key == ' ' || paused) {
             wait = 0;
@@ -90,7 +87,7 @@ void draw(){
 }
 
 /*Methods*/
-int loadStart(){/*Start Screen*/
+int loadStart(){    /*Start Screen*/
   background(0);
   fill(255);
   textAlign(CENTER);
@@ -99,7 +96,7 @@ int loadStart(){/*Start Screen*/
   text("ARCHER", width/2, height/2);
   textSize(16);
   
-  if(keyPressed){//Input into gameState.
+  if(keyPressed){    //Input into gameState.
     return 1;
   }
   else{
@@ -107,7 +104,7 @@ int loadStart(){/*Start Screen*/
   }
 }
 
-int loadMenu(){/*Main Menu*/
+int loadMenu(){    /*Main Menu*/
   background(0);
   int buttonXTM = width/2;
   int buttonYTM = height/2 - 50;
@@ -116,6 +113,7 @@ int loadMenu(){/*Main Menu*/
   int buttonXHS = width/2;
   int buttonYHS = height/2 + 50;
   
+  /*If hover overed the buttons will highlight blue*/
   if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 15) && mouseY <= (buttonYTM)){
       fill(25, 25, 125);
   }
@@ -140,15 +138,15 @@ int loadMenu(){/*Main Menu*/
   }
   text("Exit", buttonXHS, buttonYHS);
   
-  if(mousePressed){
+  if(mousePressed){    //Checks if the button is clicked
     if(mouseX >= (buttonXTM - 55) && mouseX <= (buttonXTM + 55) && mouseY >= (buttonYTM - 20) && mouseY <= (buttonYTM + 20)){
-      return 2;
+      return 2;    //Shoot Targets
     }
     if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
-      return 3;
+      return 3;    //Highscores
     }
     if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 20) && mouseY <= (buttonYHS + 20)){
-      exit();
+      exit();    //Exit
     }
   }
   return 1;
@@ -182,7 +180,7 @@ int loadTarget(){
     timer++;
   }
   else{    //Game finished screen.
-    if(wait3 < 60){
+    if(wait3 < 60){    //Wait timer to help stop input carry over
       background(0);
       wait3++;
       scoresName = true;
@@ -207,6 +205,7 @@ int loadTarget(){
       fill(255);
       text("Score: " + score, buttonXTM, buttonYTM);
       
+          //Highlighter
       if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 15) && mouseY <= (buttonYVM)){
           fill(25, 25, 125);
       }
@@ -214,6 +213,7 @@ int loadTarget(){
         fill(255);
       }
       text("Main Menu", buttonXVM, buttonYVM);
+      
       if(mouseX >= (buttonXHS - 55) && mouseX <= (buttonXHS + 55) && mouseY >= (buttonYHS - 15) && mouseY <= (buttonYHS)){
         fill(25, 25, 125);
       }
@@ -222,7 +222,7 @@ int loadTarget(){
       }
       text("Exit", buttonXHS, buttonYHS);
       
-      if(mousePressed){
+      if(mousePressed){    //Button check
         if(mouseX >= (buttonXVM - 55) && mouseX <= (buttonXVM + 55) && mouseY >= (buttonYVM - 20) && mouseY <= (buttonYVM + 20)){
           setup();
           return 1;
@@ -242,7 +242,7 @@ int loadTarget(){
 int loadScores(){ /*Highscores*/
   background(0);
   fill(255);
-  for(int i = 0; i <= 10 && i < toLoad.size(); i++){
+  for(int i = 0; i <= 10 && i < toLoad.size(); i++){    //Shows the scores on screen
     textAlign(CENTER);
     text("#" + (i+1) + " " + toLoad.get(i), width/2, 50 + ((height - 100)/10)*i);
   }
@@ -254,6 +254,7 @@ int loadScores(){ /*Highscores*/
     fill(255);
   }
   text("Main Menu", width/2, height - 20);
+  
   if(mousePressed){
     if(mouseX >= (width/2 - 55) && mouseX <= (width/2 + 55) && mouseY >= (height - 40) && mouseY <= (height - 20)){
       return 1;
@@ -310,29 +311,28 @@ int pause(int game){
 
 void keyPressed(){
   if(scoresName){
-    println("p1");
     if(key == RETURN || name.length() >= 3){
-      toLoad.add(name + " " + String.format("%03d", score));
+      toLoad.add(name + " " + String.format("%03d", score));  //formats the name and score in the format used in the file
       String temp;
       for(int i = 0; i < ( toLoad.size() - 1 ); i++){
         for(int j = 0; j < toLoad.size() - i - 1; j++){
-          if(Integer.parseInt(toLoad.get(j).substring(5, 7)) < Integer.parseInt(toLoad.get(j+1).substring(5, 7))){
+          if(Integer.parseInt(toLoad.get(j).substring(5, 7)) < Integer.parseInt(toLoad.get(j+1).substring(5, 7))){    //Bubble sort of the scores
               temp = toLoad.get(j);
               toLoad.set(j, toLoad.get(j+1));
               toLoad.set(j+1, temp);
            }
         }
       }
-      output = createWriter("data\\highscore.txt"); 
-      for(int i = 0; i < 10 && i < toLoad.size(); i++){
+      output = createWriter("data\\highscore.txt"); //Creates the file to write to
+      for(int i = 0; i < 10 && i < toLoad.size(); i++){    //Output to file
         println(toLoad.get(i));
         output.println(toLoad.get(i));
       }
       output.flush();
-      output.close();
+      output.close();    //Closes the file
       scoresName = false;
     }
-    else{
+    else{    //Takes keyboard input, coverts it to uppercase
       name += key;
       name = name.toUpperCase();
     }
